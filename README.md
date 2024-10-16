@@ -19,7 +19,7 @@ Installation
 Clone the repository:
 bash
 Copy code
-git clone https://github.com/imsubhu/weight-price-calculator.git
+git clone https://github.com/imsubhu/Weight-Price-Calculator-.git
 Navigate to the project directory:
 bash
 Copy code
