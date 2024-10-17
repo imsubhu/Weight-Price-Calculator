@@ -36,22 +36,38 @@ def calculate():
     except ValueError:
         messagebox.showerror("Invalid Input", "Please enter valid numeric values for price and weight.")
 
+import datetime  # Import datetime module for current date
+
 # Function to save purchase details to a .txt file
 def save_purchase_details():
-    item_name = item_name_entry.get()
+    item_name = item_name_entry.get() or "Purchase_Details"  # Default to "Purchase_Details" if no item name is provided
     details = result_label.cget("text")
+    
     if not details:
         messagebox.showerror("Error", "No details to save. Please calculate first.")
         return
-
+    
+    # Get the current date
+    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    
+    # Create a default file name using the item name and current date
+    default_file_name = f"{item_name}_{current_date}.txt"
+    
+    # Ask the user where to save the file
     file_path = filedialog.asksaveasfilename(defaultextension=".txt", 
+                                             initialfile=default_file_name,
                                              filetypes=[("Text files", "*.txt")], 
                                              title="Save Purchase Details")
     if file_path:
         try:
+            # Append a footer to the details
+            footer = "\n\nSoftware developed by imsubhu."
+            details_with_footer = details + footer
+            
             # Save file with UTF-8 encoding to support special characters
             with open(file_path, "w", encoding="utf-8") as file:
-                file.write(details)
+                file.write(details_with_footer)
+            
             messagebox.showinfo("Saved", f"Details saved at {file_path}")
         except Exception as e:
             messagebox.showerror("Error", f"Could not save the file: {e}")
