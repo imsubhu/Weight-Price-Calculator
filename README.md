@@ -30,7 +30,7 @@ Includes an "About" section featuring the developer: imsubhu.
 bash
 Copy code
 # Clone this repository
-git clone https://github.com/yourusername/weight-price-calculator.git
+git clone https://github.com/imsubhu/weight-price-calculator.git
 
 # Navigate to the project folder
 cd weight-price-calculator
