@@ -1,13 +1,28 @@
 import tkinter as tk
 from tkinter import messagebox, filedialog
 from tkinter import ttk
+import math
 
 # Function to perform the calculations
 def calculate():
+    result_label.config(text="")
     try:
         price_per_kg = float(price_per_kg_entry.get())  # Price per kilogram
         input_value = float(input_entry.get())  # The user input (price or weight)
+
+        if not math.isfinite(price_per_kg) or not math.isfinite(input_value):
+            raise ValueError
+        if price_per_kg <= 0 or input_value < 0:
+            messagebox.showerror(
+                "Invalid Input",
+                "Price per kilogram must be greater than zero, and price or weight must be nonnegative."
+            )
+            return
+
         price_per_gram = price_per_kg / 1000  # Price per gram
+        if price_per_gram == 0:
+            messagebox.showerror("Invalid Input", "Price per kilogram is too small to calculate.")
+            return
 
         # Display variables
         result_text = ""
@@ -18,13 +33,15 @@ def calculate():
         result_text += f"{input_value:.2f} grams = {cost_for_grams:.2f} ₨.\n"
 
         # Case 2: Input interpreted as price in rupees (what it can buy in grams)
-        if input_value >= price_per_gram:
-            grams_can_buy = input_value / price_per_gram
-            result_text += f"{input_value:.2f} ₨ = {grams_can_buy:.2f} grams.\n"
+        grams_can_buy = input_value / price_per_gram
+        result_text += f"{input_value:.2f} ₨ = {grams_can_buy:.2f} grams.\n"
 
         # Case 3: Input interpreted as weight in kilograms
         kilograms = input_value / 1000
         kilogram_cost = input_value * price_per_kg
+        if not all(math.isfinite(value) for value in (cost_for_grams, grams_can_buy, kilogram_cost)):
+            messagebox.showerror("Invalid Input", "The entered values are too large to calculate.")
+            return
         result_text += f"{input_value:.2f} kilograms = {kilogram_cost:.2f} ₨."
 
         # Add item name if provided
@@ -34,7 +51,10 @@ def calculate():
         result_label.config(text=result_text)
 
     except ValueError:
-        messagebox.showerror("Invalid Input", "Please enter valid numeric values for price and weight.")
+        messagebox.showerror(
+            "Invalid Input",
+            "Enter valid numeric values. Price per kilogram must be greater than zero, and price or weight must be nonnegative."
+        )
 
 import datetime  # Import datetime module for current date
 
